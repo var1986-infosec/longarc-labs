@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { questions } from "../data/questions";
+import GapAnalysis from "./GapAnalysis";
 
 type AssessmentProps = {
   onBack: () => void;
@@ -75,8 +76,14 @@ function Assessment({ onBack }: AssessmentProps) {
           }}
         >
           Your score provides an initial view of your organization's
-          AI governance readiness.
+          AI governance readiness.  
         </p>
+
+<GapAnalysis
+  questions={questions}
+  scores={scores}
+/>
+
 
         <button
           onClick={onBack}
