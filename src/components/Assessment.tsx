@@ -11,6 +11,8 @@ function Assessment({ onBack }: AssessmentProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
   const [completed, setCompleted] = useState(false);
+  const [feedback, setFeedback] = useState("");
+const [interest, setInterest] = useState(false);
 
   const question = questions[currentQuestion];
 
@@ -34,26 +36,26 @@ function Assessment({ onBack }: AssessmentProps) {
   }
 
   if (completed) {
-    const score = calculateScore();
+  const score = calculateScore();
 
-    let readiness = "Needs Attention";
+  let readiness = "Needs Attention";
 
-    if (score >= 80) {
-      readiness = "Strong Readiness";
-    } else if (score >= 50) {
-      readiness = "Moderate Readiness";
-    }
+  if (score >= 80) {
+    readiness = "Strong Readiness";
+  } else if (score >= 50) {
+    readiness = "Moderate Readiness";
+  }
 
-    return (
-      <div
-        style={{
-          maxWidth: 700,
-          margin: "60px auto",
-          padding: "30px",
-          textAlign: "center",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
+  return (
+    <div
+      style={{
+        maxWidth: 700,
+        margin: "40px auto",
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
         <h1>Your AI Governance Score</h1>
 
         <div
@@ -77,19 +79,131 @@ function Assessment({ onBack }: AssessmentProps) {
           }}
         >
           Your score provides an initial view of your organization's
-          AI governance readiness.  
+          AI governance readiness.
         </p>
+      </div>
 
-<GapAnalysis
-  questions={questions}
-  scores={scores}
-/>
+      <GapAnalysis
+        questions={questions}
+        scores={scores}
+      />
 
-<ActionPlan
-  questions={questions}
-  scores={scores}
-/>
+      <ActionPlan
+        questions={questions}
+        scores={scores}
+      />
 
+      <div
+        style={{
+          marginTop: "50px",
+          padding: "30px",
+          background: "#ffffff",
+          border: "1px solid #e5e7eb",
+          borderRadius: "12px",
+        }}
+      >
+        <h2>Was this assessment useful?</h2>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            marginTop: "20px",
+          }}
+        >
+          <button
+            onClick={() => setFeedback("Yes")}
+            style={{
+              padding: "10px 18px",
+              borderRadius: "8px",
+              border: "1px solid #d0d5dd",
+              background:
+                feedback === "Yes" ? "#e8f1ff" : "#ffffff",
+              cursor: "pointer",
+            }}
+          >
+            👍 Yes
+          </button>
+
+          <button
+            onClick={() => setFeedback("No")}
+            style={{
+              padding: "10px 18px",
+              borderRadius: "8px",
+              border: "1px solid #d0d5dd",
+              background:
+                feedback === "No" ? "#e8f1ff" : "#ffffff",
+              cursor: "pointer",
+            }}
+          >
+            👎 Not really
+          </button>
+        </div>
+
+        {feedback && (
+          <div style={{ marginTop: "20px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                fontWeight: "bold",
+              }}
+            >
+              What would make this more useful?
+            </label>
+
+            <textarea
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              placeholder="Tell us what you would like to see..."
+              rows={4}
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "1px solid #d0d5dd",
+                borderRadius: "8px",
+                boxSizing: "border-box",
+                fontFamily: "Arial, sans-serif",
+              }}
+            />
+          </div>
+        )}
+
+        <div
+          style={{
+            marginTop: "30px",
+            paddingTop: "25px",
+            borderTop: "1px solid #e5e7eb",
+          }}
+        >
+          <h3>Want a deeper assessment?</h3>
+
+          <p style={{ color: "#667085" }}>
+            We're building a more comprehensive AI Governance
+            Readiness assessment. Join the early-access list to
+            hear when it's available.
+          </p>
+
+          <button
+            onClick={() => setInterest(true)}
+            style={{
+              padding: "12px 20px",
+              borderRadius: "8px",
+              border: "none",
+              background: "#175cd3",
+              color: "#ffffff",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            {interest
+              ? "You're on the list ✓"
+              : "Join Early Access"}
+          </button>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: "30px" }}>
         <button
           onClick={onBack}
           style={{
@@ -105,9 +219,9 @@ function Assessment({ onBack }: AssessmentProps) {
           Back to LongArc
         </button>
       </div>
-    );
-  }
-
+    </div>
+  );
+}
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
