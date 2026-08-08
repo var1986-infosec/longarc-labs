@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { questions } from "../data/questions";
 import GapAnalysis from "./GapAnalysis";
+import ActionPlan from "./ActionPlan";
 
 type AssessmentProps = {
   onBack: () => void;
@@ -84,6 +85,10 @@ function Assessment({ onBack }: AssessmentProps) {
   scores={scores}
 />
 
+<ActionPlan
+  questions={questions}
+  scores={scores}
+/>
 
         <button
           onClick={onBack}
