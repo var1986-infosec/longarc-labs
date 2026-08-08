@@ -9,6 +9,8 @@ function App() {
 
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+const [editText, setEditText] = useState("");
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -24,6 +26,24 @@ function App() {
   function deleteNote(index: number) {
     setNotes((prev) => prev.filter((_, i) => i !== index));
   }
+
+function startEditing(index: number) {
+  setEditingIndex(index);
+  setEditText(notes[index]);
+}
+
+function saveEdit() {
+  if (editingIndex === null) return;
+
+  setNotes((prev) =>
+    prev.map((note, index) =>
+      index === editingIndex ? editText : note
+    )
+  );
+
+  setEditingIndex(null);
+  setEditText("");
+}
 
   const filteredNotes = notes
     .map((note, index) => ({
@@ -78,9 +98,14 @@ function App() {
       />
 
       <NotesList
-        notes={filteredNotes}
-        onDelete={deleteNote}
-      />
+  notes={filteredNotes}
+  onDelete={deleteNote}
+  editingIndex={editingIndex}
+  editText={editText}
+  onStartEditing={startEditing}
+  onEditTextChange={setEditText}
+  onSaveEdit={saveEdit}
+/>
     </div>
   );
 }
