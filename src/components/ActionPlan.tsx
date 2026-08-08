@@ -92,11 +92,12 @@ function ActionPlan({ questions, scores }: ActionPlanProps) {
     .map((question, index) => ({
       question,
       score: scores[index] ?? 0,
+      index,
     }))
     .filter((item) => item.score < 2)
     .sort((a, b) => a.score - b.score)
-    .map((item) =>
-      getActionItem(item.question, item.score)
+    .map((item, priorityIndex) =>
+      getActionItem(item.question, priorityIndex + 1)
     );
 
   if (actionItems.length === 0) {
