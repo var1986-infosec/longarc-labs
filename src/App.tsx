@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import NotesList from "./components/NotesList";
 
 function App() {
   const [notes, setNotes] = useState<string[]>(() => {
@@ -9,7 +10,6 @@ function App() {
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
 
-  // Save notes whenever they change
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
@@ -25,9 +25,14 @@ function App() {
     setNotes((prev) => prev.filter((_, i) => i !== index));
   }
 
-  const filteredNotes = notes.filter((note) =>
-    note.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredNotes = notes
+    .map((note, index) => ({
+      text: note,
+      index,
+    }))
+    .filter((note) =>
+      note.text.toLowerCase().includes(search.toLowerCase())
+    );
 
   return (
     <div
@@ -72,27 +77,10 @@ function App() {
         }}
       />
 
-      <ul style={{ marginTop: 20 }}>
-        {filteredNotes.map((note, index) => (
-          <li
-            key={index}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "10px",
-              border: "1px solid #ddd",
-              marginBottom: "8px",
-              borderRadius: "6px",
-            }}
-          >
-            {note}
-
-            <button onClick={() => deleteNote(index)}>
-              ❌
-            </button>
-          </li>
-        ))}
-      </ul>
+      <NotesList
+        notes={filteredNotes}
+        onDelete={deleteNote}
+      />
     </div>
   );
 }
