@@ -291,14 +291,18 @@ function App() {
           }
 
           .longarc-benefits {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
 
-            gap: 30px 20px;
+  margin-top: 55px;
+}
 
-            margin-top: 55px;
-          }
-
+.longarc-benefit {
+  width: 100%;
+  max-width: 220px;
+}
           .longarc-benefit {
             min-width: 0;
           }
